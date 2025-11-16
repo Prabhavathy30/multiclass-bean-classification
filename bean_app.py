@@ -1,15 +1,13 @@
 import streamlit as st
 import numpy as np
-import joblib  # Loaded from requirements.txt automatically
+import joblib
 
-st.set_page_config(page_title="Bean Type Classifier", page_icon="🌱", layout="centered")
+st.set_page_config(page_title="Bean Type Classifier", page_icon="🌱")
 
 st.title("🌱 Bean Type Classifier")
 st.write("Predict the type of bean based on input features.")
 
-# ------------------------------
-# Load the saved model
-# ------------------------------
+# Load the model
 @st.cache_resource
 def load_model():
     try:
@@ -21,33 +19,20 @@ def load_model():
 
 model = load_model()
 
-# ------------------------------
-# Feature Inputs
-# ------------------------------
+# Inputs
 feature_names = [
-    "Area",
-    "Perimeter",
-    "MajorAxisLength",
-    "MinorAxisLength",
-    "ConvexArea",
-    "EquivDiameter",
-    "Eccentricity",
-    "Solidity",
-    "Extent",
-    "AspectRatio",
-    "Roundness"
+    "Area","Perimeter","MajorAxisLength","MinorAxisLength",
+    "ConvexArea","EquivDiameter","Eccentricity","Solidity",
+    "Extent","AspectRatio","Roundness"
 ]
 
-st.header("Enter Bean Features")
 inputs = [st.number_input(f"{f}", value=0.0) for f in feature_names]
 input_array = np.array(inputs).reshape(1, -1)
 
-# ------------------------------
-# Prediction
-# ------------------------------
+# Predict button
 if st.button("Predict"):
     if model:
         prediction = model.predict(input_array)[0]
         st.success(f"✅ Predicted Bean Type: **{prediction}**")
     else:
-        st.warning("Model is not loaded. Please check the joblib file and requirements.txt.")
+        st.warning("Model is not loaded. Check your joblib file and requirements.")
